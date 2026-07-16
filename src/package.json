@@ -1,0 +1,31 @@
+{
+  "name": "aiet_code_project",
+  "version": "1.0.0",
+  "description": "Simple Express.js app for Gadget House",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.2",
+    "connect-mongo": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^4.18.2",
+    "express-session": "^1.19.0",
+    "express-validate": "^0.0.8",
+    "express-validator": "^7.3.2",
+    "http-errors": "^2.0.1",
+    "mongoose": "^9.6.3",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.22.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "license": "ISC",
+  "type": "commonjs"
+}
