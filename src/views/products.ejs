@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %> | Gadget House</title>
+</head>
+<body>
+  <h1>Available Gadgets</h1>
+  <% if (products && products.length) { %>
+    <ul>
+      <% products.forEach(product => { %>
+        <li>
+          <strong><%= product.name %></strong> - $<%= product.price.toFixed(2) %><br>
+          <span>Stock: <%= product.stock %></span><br>
+          <p><%= product.description %></p>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No products available yet.</p>
+  <% } %>
+  <a href="/home">Back Home</a>
+</body>
+</html>
