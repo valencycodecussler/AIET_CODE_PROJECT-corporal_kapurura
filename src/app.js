@@ -16,29 +16,29 @@ app.use(express.urlencoded({ extended: true }));//for form data if neeeded
 
 app.use(express.static(path.join(__dirname, 'views', 'public')));
 
-mongoose.connect(mongoURI)//establishes connection to the mongodb 
-.then(() => console.log(`MongoDB connected to ${mongoURI}`))//fires a successful db connection
-.catch(err => {//catches a connection error
-  console.error('MongoDB connection error:', err);
-  process.exit(1); //exit if db doesn't connect.
-});
+// mongoose.connect(mongoURI)//establishes connection to the mongodb 
+// .then(() => console.log(`MongoDB connected to ${mongoURI}`))//fires a successful db connection
+// .catch(err => {//catches a connection error
+//   console.error('MongoDB connection error:', err);
+//   process.exit(1); //exit if db doesn't connect.
+// });
 
-app.use(session({
-    name:'sid',//name of the cookie to store session id
-    secret:'iamCodeCussler',//my security key
-    resave:false, //to avoid resaving unchanged sessions
-    saveUninitialized:false,//only save sessions with initialized data 
-    store: MongoStore.create({ // store sessions in MongoDB
-      mongoUrl: mongoURI,
-      collectionName: 'sessions'
-    }),
-    cookie: {
-        httpOnly: true,//prevents javascript access to the cookie.
-        secure: false,//Set true if playing if using HTTPS
-        maxAge:24*60*60*1000//1 day
-    },  
-    })
-);
+// app.use(session({
+//     name:'sid',//name of the cookie to store session id
+//     secret:'iamCodeCussler',//my security key
+//     resave:false, //to avoid resaving unchanged sessions
+//     saveUninitialized:false,//only save sessions with initialized data 
+//     store: MongoStore.create({ // store sessions in MongoDB
+//       mongoUrl: mongoURI,
+//       collectionName: 'sessions'
+//     }),
+//     cookie: {
+//         httpOnly: true,//prevents javascript access to the cookie.
+//         secure: false,//Set true if playing if using HTTPS
+//         maxAge:24*60*60*1000//1 day
+//     },  
+//     })
+// );
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
