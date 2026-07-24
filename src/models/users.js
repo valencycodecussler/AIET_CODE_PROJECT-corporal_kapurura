@@ -1,24 +1,37 @@
-const mongoose = require('mongoose');
+const {DataTypes, Sequelize} =require('sequelize');
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  regDate: {
-    type: Date,
-    default: new Date().toISOString() // dynamic timestamp for each new user
-  }
-});
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = (Sequelize)=>{
+    const User = Sequelize.define('User',{
+        id:{
+            type:DataTypes.INTEGER,
+            autoIncrement:true,
+            primaryKey:true
+        },
+        username:{
+            type:DataTypes.STRING(50),
+            allowNull:false,
+            unique:true
+        },
+        email:{
+            type:DataTypes.STRING(100),
+            allowNull:false,
+            unique:true,
+            validate:{
+                isEmail:true
+            }
+        },
+        password:{
+            type:DataTypes.STRING(255),
+            allowNull:false
+        },
+        regDate:{
+            type:DataTypes.DATE,
+            defaultValue:DataTypes.NOW
+        }
+    },{
+        timestamp:false,//we use regDate instead of CreatedAt
+        tableName:'assignment_users'//match existing table name
+    });
+    
+    return User;
+};

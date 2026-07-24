@@ -1,14 +1,15 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const MongoStoreModule = require('connect-mongo');
-const MongoStore = MongoStoreModule.default || MongoStoreModule; // imports mongostore to save sessions into mongodb
+//const MongoStoreModule = require('connect-mongo');
+//const MongoStore = MongoStoreModule.default || MongoStoreModule; // imports mongostore to save sessions into mongodb
 const env = require('dotenv').config();//loads env variables from a .env file into process.env
-const mongoose = require('mongoose');//ODM library to interact with mongodb
+//const mongoose = require('mongoose');//ODM library to interact with mongodb
 const mongoURI = process.env.MONGODB_URI;//grabs connecntion string from env vars
 const logger = require('morgan');
 const app = express();
 const port = process.env.PORT || 3000;
+const { sequelize, User, Product, Order, Invoice } = require('./models/db');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -58,6 +59,13 @@ app.use((err, req, res, next) => {//global error handler middleware
   console.error(err.stack);//logs full error stack trace to the console
   res.status(500).json({ error: 'Internal Server Error' });
 });//sends status code 500 internal server error
+
+
+// Sync models 
+sequelize.sync({ alter: true }) 
+  .then(() => console.log('Database synced'))
+  .catch(err => console.error('Sync error:', err));
+
 
 const server = app.listen(port, () => {
   console.log(`App is running at http://127.0.0.1:${port}/`);

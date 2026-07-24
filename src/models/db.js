@@ -1,42 +1,51 @@
-const mysql = require('mysql2/promise'); // Using promise-based version for async/await
+const{Sequelize,} =require('sequelize');
 require('dotenv').config();
 
-// Create the connection pool using environmental variables
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
-
-
-async function initializeDatabase() {
-    try {
-        const connection = await pool.getConnection();
-        console.log('Successfully connected to the remote database!');
-        
-        
-        const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS assignment_users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(50) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-        
-        await connection.query(createTableQuery);
-        console.log('Relational tables checked/created successfully.');
-        
-        connection.release(); // Always release the connection back to the pool
-    } catch (error) {
-        console.error('Database initialization failed:', error.message);
+//sequelize instance creation
+const sequelize= new Sequelize(
+    process.env.DB_NAME,
+    process.env.BD_USER,
+    process.env.DB_PASSWORD,
+    {
+        host:process.env.DB_HOST,
+        dialect:'mysql',
+        logging:false,
+        pool:{
+            max:10,
+            min:0,
+            acquire:30000,
+            idle:10000
+        }
     }
-}
+);
 
-initializeDatabase();
+//import models
+const User = require('./users.model')(sequelize);
+ const Product = require('./product.model')(sequelize);
+ const Order = require('./order.model')(sequelize);
+ const Invoice = require('./invoice.model')(sequelize);
 
-module.exports = pool;
+ //define associations
+ //Order-->User(many-to-one)
+ Order.belongsTo(User,{foreignKey:'userId'});
+ Product.hasMany(Order,{foreignKey:'productId'});
+
+ //Invoice-->Order
+ Invoice.belongsTo(Order,{foreignKey:'orderId'});
+ Order.hasOne(Invoice,{foreignKey:'orderId'});
+ 
+ //Invoice-->User(optional, but useful for direct reference)
+ Invoice.belongsTo(User,{foreignKey:'userId'});
+ User.hasMany(Invoice,{foreignKey:'userId'});
+
+ //Invoice-->Product
+ Invoice.belongsTo(Product,{foreignkey:'productId'});
+ Product.hasMany(Invoice,{foreignKey:'productId'});
+
+ module.exports = {
+    sequelize,
+    User,
+    Product,
+    Order,
+    Invoice
+ };

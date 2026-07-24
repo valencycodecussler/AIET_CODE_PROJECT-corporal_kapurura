@@ -1,14 +1,39 @@
-const mongoose = require('mongoose');
+const {DataTypes, Sequelize, INTEGER} = require('sequelize');
+const { Invoice } = require('./db');
 
-const invoiceSchema = new mongoose.Schema({
-    invoiceNumber : { type: String, required: true, unique: true },
-    order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-    quantity: { type: Number, required: true },
-    totalPrice: { type: Number, required: true },
-    status: { type: String, enum: ['Paid', 'Pending', 'Cancelled'], default: 'Paid' },
-    createdAt: { type: Date, default: new Date().toLocaleString() }
-});
-
-module.exports = mongoose.model('Invoice',invoiceSchema);
+module.exports = (Sequelize)=>{
+    const User = Sequelize.define('User',{
+        id:{
+            type:DataTypes.INTEGER,
+            autoIncrement:true,
+            primaryKey:true
+        },
+        invoiceNumber:{
+            type:DataTypes.STRING,
+            allowNull:false,
+            unique:true
+        },
+        quantity:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+            validate:{min:1}
+        },
+        totalPrice:{
+            type:DataTypes.DECIMAL(10,2),
+            allowNull:false,
+            validate:{min:0}
+        },
+        status:{
+            type:DataTypes.ENUM('Paid','Pending','Cancelled'),
+            defaultValue:'Paid'
+        },
+        createdAt:{
+            type:DataTypes.DATE,
+            defaultValue:DataTypes.NOW
+        }
+    },{
+        timestamps:false,
+        tableName:'invoices'
+    })
+    return Invoice;
+};
