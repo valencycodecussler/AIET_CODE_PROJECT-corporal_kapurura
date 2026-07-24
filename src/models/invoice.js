@@ -32,7 +32,7 @@ module.exports = (Sequelize)=>{
             defaultValue:DataTypes.NOW
         }
     },{
-        timestamps:false,
+        timestamps:true,
         tableName:'invoices'
     })
     return Invoice;
