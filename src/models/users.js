@@ -32,6 +32,6 @@ module.exports = (Sequelize)=>{
         timestamp:false,//we use regDate instead of CreatedAt
         tableName:'assignment_users'//match existing table name
     });
-    
+     
     return User;
 };
