@@ -45,3 +45,4 @@ module.exports = {
     Order,
     Invoice
 };
+

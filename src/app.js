@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const authRouter = require('./models/auth');   
+const authRouter = require('./routes/auth');   
 
 //const MongoStoreModule = require('connect-mongo');
 //const MongoStore = MongoStoreModule.default || MongoStoreModule; // imports mongostore to save sessions into mongodb
@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'views', 'public')));
 //     },  
 //     })
 // );
-const session = require('express-session');
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,

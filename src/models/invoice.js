@@ -2,7 +2,7 @@ const {DataTypes, Sequelize, INTEGER} = require('sequelize');
 const { Invoice } = require('./db');
 
 module.exports = (Sequelize)=>{
-    const User = Sequelize.define('User',{
+    const Invoice = Sequelize.define('invoice',{
         id:{
             type:DataTypes.INTEGER,
             autoIncrement:true,
@@ -37,3 +37,4 @@ module.exports = (Sequelize)=>{
     })
     return Invoice;
 };
+

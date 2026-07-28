@@ -58,3 +58,9 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+module.exports = router;
+
+console.log('User object:', User);
+console.log('typeof User:', typeof User);
+console.log('User.findOne:',User.findOne);
