@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
+const authRouter = require('./models/auth');   
+
 //const MongoStoreModule = require('connect-mongo');
 //const MongoStore = MongoStoreModule.default || MongoStoreModule; // imports mongostore to save sessions into mongodb
 const env = require('dotenv').config();//loads env variables from a .env file into process.env
@@ -40,6 +42,13 @@ app.use(express.static(path.join(__dirname, 'views', 'public')));
 //     },  
 //     })
 // );
+const session = require('express-session');
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true } 
+}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -49,9 +58,11 @@ const userRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const invoiceRoutes = require('./routes/invoices');
+
 //mount router files to specific URL paths
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
+app.use('/auth', authRouter);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/invoices', invoiceRoutes);

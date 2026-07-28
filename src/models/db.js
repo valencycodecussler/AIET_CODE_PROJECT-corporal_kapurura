@@ -1,51 +1,47 @@
-const{Sequelize,} =require('sequelize');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-//sequelize instance creation
-const sequelize= new Sequelize(
+const sequelize = new Sequelize(
     process.env.DB_NAME,
-    process.env.BD_USER,
+    process.env.DB_USER,          
     process.env.DB_PASSWORD,
     {
-        host:process.env.DB_HOST,
-        dialect:'mysql',
-        logging:false,
-        pool:{
-            max:10,
-            min:0,
-            acquire:30000,
-            idle:10000
+        host: process.env.DB_HOST,
+        dialect: 'mysql',
+        logging: false,
+        pool: {
+            max: 10,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
         }
     }
 );
 
-//import models
-const User = require('./users.model')(sequelize);
- const Product = require('./product.model')(sequelize);
- const Order = require('./order.model')(sequelize);
- const Invoice = require('./invoice.model')(sequelize);
 
- //define associations
- //Order-->User(many-to-one)
- Order.belongsTo(User,{foreignKey:'userId'});
- Product.hasMany(Order,{foreignKey:'productId'});
+const User = require('./users')(sequelize);
+const Product = require('./product')(sequelize);
+const Order = require('./order')(sequelize);
+const Invoice = require('./invoice')(sequelize);
 
- //Invoice-->Order
- Invoice.belongsTo(Order,{foreignKey:'orderId'});
- Order.hasOne(Invoice,{foreignKey:'orderId'});
- 
- //Invoice-->User(optional, but useful for direct reference)
- Invoice.belongsTo(User,{foreignKey:'userId'});
- User.hasMany(Invoice,{foreignKey:'userId'});
+Order.belongsTo(User, { foreignKey: 'userId' });
+Order.belongsTo(Product, { foreignKey: 'productId' });
+User.hasMany(Order, { foreignKey: 'userId' });
+Product.hasMany(Order, { foreignKey: 'productId' });
 
- //Invoice-->Product
- Invoice.belongsTo(Product,{foreignkey:'productId'});
- Product.hasMany(Invoice,{foreignKey:'productId'});
+Invoice.belongsTo(Order, { foreignKey: 'orderId' });
+Order.hasOne(Invoice, { foreignKey: 'orderId' });
 
- module.exports = {
+Invoice.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Invoice, { foreignKey: 'userId' });
+
+Invoice.belongsTo(Product, { foreignKey: 'productId' });
+Product.hasMany(Invoice, { foreignKey: 'productId' });
+
+module.exports = {
     sequelize,
     User,
     Product,
     Order,
     Invoice
- };
+};
