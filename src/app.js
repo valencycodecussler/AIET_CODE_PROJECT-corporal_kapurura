@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const authRouter = require('./routes/auth');   
+const DB_NAME = process.env.DB_NAME;
 
 //const MongoStoreModule = require('connect-mongo');
 //const MongoStore = MongoStoreModule.default || MongoStoreModule; // imports mongostore to save sessions into mongodb
@@ -80,6 +81,7 @@ sequelize.sync({ alter: true })
 
 const server = app.listen(port, () => {
   console.log(`App is running at http://127.0.0.1:${port}/`);
+  console.log(`Connected to Database ${DB_NAME}`);
 });
 
 
