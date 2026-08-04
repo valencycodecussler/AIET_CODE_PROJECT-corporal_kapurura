@@ -1,40 +1,79 @@
-const {DataTypes, Sequelize, INTEGER} = require('sequelize');
-const { Invoice } = require('./db');
+const { DataTypes } = require('sequelize');
 
-module.exports = (Sequelize)=>{
-    const Invoice = Sequelize.define('invoice',{
-        id:{
-            type:DataTypes.INTEGER,
-            autoIncrement:true,
-            primaryKey:true
+module.exports = (sequelize) => {
+
+    const Invoice = sequelize.define('Invoice', {
+
+        id: {
+
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+
         },
-        invoiceNumber:{
-            type:DataTypes.STRING,
-            allowNull:false,
-            unique:true
+
+        invoiceNumber: {
+
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
+
         },
-        quantity:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            validate:{min:1}
+
+        orderId: {
+
+            type: DataTypes.INTEGER,
+            allowNull: false
+
         },
-        totalPrice:{
-            type:DataTypes.DECIMAL(10,2),
-            allowNull:false,
-            validate:{min:0}
+
+        userId: {
+
+            type: DataTypes.INTEGER,
+            allowNull: false
+
         },
-        status:{
-            type:DataTypes.ENUM('Paid','Pending','Cancelled'),
-            defaultValue:'Paid'
+
+        productId: {
+
+            type: DataTypes.INTEGER,
+            allowNull: false
+
         },
-        createdAt:{
-            type:DataTypes.DATE,
-            defaultValue:DataTypes.NOW
+
+        quantity: {
+
+            type: DataTypes.INTEGER,
+            allowNull: false
+
+        },
+
+        totalPrice: {
+
+            type: DataTypes.DECIMAL(10,2),
+            allowNull: false
+
+        },
+
+        status: {
+
+            type: DataTypes.ENUM(
+                'Paid',
+                'Pending',
+                'Cancelled'
+            ),
+
+            defaultValue: 'Pending'
+
         }
-    },{
-        timestamps:true,
-        tableName:'invoices'
-    })
-    return Invoice;
-};
 
+    }, {
+
+        tableName: 'invoices',
+        timestamps: false
+
+    });
+
+    return Invoice;
+
+}

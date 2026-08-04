@@ -29,9 +29,8 @@ router.post('/register', async (req, res) => {
     const normalizedEmail = String(email).trim().toLowerCase();//sanitize email formatting
     const trimmedUsername = String(username).trim();//remove leading/trailing spaces from userrname
 
-    const existingUser = await User.findOne({
-      $or: [{ email: normalizedEmail }, { username: trimmedUsername }]//checks if email or username is already taken in the database
-    });
+    const existingUser = await User.findOne({ email: normalizedEmail } //checks if email or username is already taken in the database
+    );
 
     if (existingUser) {
       return res.status(409).json({ //conflict status code
@@ -85,9 +84,7 @@ router.post('/login', async (req, res) => {
     const normalizedEmail = email ? String(email).trim().toLowerCase() : null;
     //query user account records dynamically depending on which field the user logged in with 
     const user = await User.findOne(
-      trimmedUsername
-        ? { username: trimmedUsername }
-        : { email: normalizedEmail }
+         { email: normalizedEmail }
     );
 
     if (!user) {

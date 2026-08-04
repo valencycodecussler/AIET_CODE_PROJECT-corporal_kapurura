@@ -74,11 +74,12 @@ app.use((err, req, res, next) => {//global error handler middleware
 
 
 // Sync models 
-sequelize.sync({ alter: true }) 
+// Sync models
+sequelize.sync({ force: true })
   .then(() => console.log('Database synced'))
   .catch(err => console.error('Sync error:', err));
 
-
+  
 const server = app.listen(port, () => {
   console.log(`App is running at http://127.0.0.1:${port}/`);
   console.log(`Connected to Database ${DB_NAME}`);
